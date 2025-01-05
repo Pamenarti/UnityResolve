@@ -127,71 +127,71 @@
 # End of Selection
 
 #### Get the function address (variable offset) and invoke (modify/get)
-// This section of code demonstrates how to retrieve the address of a function within a specified assembly, 
-// access its fields, and invoke methods dynamically. 
+>  This section of code demonstrates how to retrieve the address of a function within a specified assembly, 
+>  access its fields, and invoke methods dynamically. 
 
 const auto assembly = UnityResolve::Get("assembly.dll | assembly name.dll"); // Retrieve the assembly by its name.
 const auto pClass   = assembly->Get("className | class name"); // Get the class from the assembly.
-// The following commented lines provide alternative ways to retrieve the class, 
-// either by using a wildcard or specifying a namespace.
-// assembly->Get("className | class name", "*");
-// assembly->Get("className | class name", "namespace | namespace");
+>  The following commented lines provide alternative ways to retrieve the class, 
+>  either by using a wildcard or specifying a namespace.
+>  assembly->Get("className | class name", "*");
+> assembly->Get("className | class name", "namespace | namespace");
 
 const auto field       = pClass->Get<UnityResolve::Field>("Field Name | variable name"); // Access a specific field in the class.
 const auto fieldOffset = pClass->Get<std::int32_t>("Field Name | variable name"); // Get the offset of the field within the class.
 const int  time        = pClass->GetValue<int>(obj Instance | object address, "time"); // Retrieve the value of the 'time' field from an instance of the class.
-// The following commented line shows an alternative way to get the value from an instance.
-// pClass->GetValue(obj Instance*, name);
+>  The following commented line shows an alternative way to get the value from an instance.
+>  pClass->GetValue(obj Instance*, name);
                         = pClass->SetValue<int>(obj Instance | object address, "time", 114514); // Set a new value for the 'time' field.
-// The following commented line shows an alternative way to set the value in an instance.
-// pClass->SetValue(obj Instance*, name, value);
-const auto method      = pClass->Get<UnityResolve::Method>("Method Name | function name"); // Retrieve a method from the class.
-// The following commented lines provide examples of how to retrieve methods with different parameter types.
-// pClass->Get<UnityResolve::Method>("Method Name | function name", { "System.String" });
-// pClass->Get<UnityResolve::Method>("Method Name | function name", { "*", "System.String" });
-// pClass->Get<UnityResolve::Method>("Method Name | function name", { "*", "", "System.String" });
-// pClass->Get<UnityResolve::Method>("Method Name | function name", { "*", "System.Int32", "System.String" });
-// pClass->Get<UnityResolve::Method>("Method Name | function name", { "*", "System.Int32", "System.String", "*" });
-// "*" == "" indicates that any type can be accepted as a parameter.
-const auto functionPtr = method->function;
+>  The following commented line shows an alternative way to set the value in an instance.
+>  pClass->SetValue(obj Instance*, name, value);
+> const auto method      = pClass->Get<UnityResolve::Method>("Method Name | function name"); // Retrieve a method from the class.
+>  The following commented lines provide examples of how to retrieve methods with different parameter types.
+>  pClass->Get<UnityResolve::Method>("Method Name | function name", { "System.String" });
+>  pClass->Get<UnityResolve::Method>("Method Name | function name", { "*", "System.String" });
+>  pClass->Get<UnityResolve::Method>("Method Name | function name", { "*", "", "System.String" });
+>  pClass->Get<UnityResolve::Method>("Method Name | function name", { "*", "System.Int32", "System.String" });
+>  pClass->Get<UnityResolve::Method>("Method Name | function name", { "*", "System.Int32", "System.String", "*" });
+>  "*" == "" indicates that any type can be accepted as a parameter.
+>  const auto functionPtr = method->function;
 
-// The following code retrieves two methods from the specified class within the assembly. 
-// The 'Get' function is used to access methods by their names, which allows for dynamic invocation later on. 
-// 'method1' and 'method2' are placeholders for the actual method names that need to be specified.
-// This approach is essential for scenarios where methods need to be called at runtime, 
-// enabling flexibility and extensibility in the codebase.
-const auto method1 = pClass->Get<UnityResolve::Method>("method name1 | function name 1");
-const auto method2 = pClass->Get<UnityResolve::Method>("method name2 | function name 2");
+>  The following code retrieves two methods from the specified class within the assembly. 
+>  The 'Get' function is used to access methods by their names, which allows for dynamic invocation later on. 
+>  'method1' and 'method2' are placeholders for the actual method names that need to be specified.
+>  This approach is essential for scenarios where methods need to be called at runtime, 
+>  enabling flexibility and extensibility in the codebase.
+>  const auto method1 = pClass->Get<UnityResolve::Method>("method name1 | function name 1");
+>  const auto method2 = pClass->Get<UnityResolve::Method>("method name2 | function name 2");
 
 
-// The following code demonstrates how to invoke a method dynamically using the UnityResolve framework. 
-// The method1 is invoked with specific parameters, where the return type is specified as int. 
-method1->Invoke<int>(114, 514, "114514"); 
-// This line illustrates the syntax for invoking a method with a specified return type and arguments.
+>  The following code demonstrates how to invoke a method dynamically using the UnityResolve framework. 
+>  The method1 is invoked with specific parameters, where the return type is specified as int. 
+>  method1->Invoke<int>(114, 514, "114514"); 
+>  This line illustrates the syntax for invoking a method with a specified return type and arguments.
 
-// The next section shows how to cast a method to a specific function pointer type. 
-// Here, method2 is cast to a MethodPointer that takes two parameters: an int and a bool, and returns void. 
-const UnityResolve::MethodPointer<void, int, bool> ptr = method2->Cast<void, int, bool>(); 
-// The casted pointer is then called with the provided arguments.
-ptr(114514, true);
+>  The next section shows how to cast a method to a specific function pointer type. 
+>  Here, method2 is cast to a MethodPointer that takes two parameters: an int and a bool, and returns void. 
+>  const UnityResolve::MethodPointer<void, int, bool> ptr = method2->Cast<void, int, bool>(); 
+>  The casted pointer is then called with the provided arguments.
+>  ptr(114514, true);
 
-// This part demonstrates how to create a MethodPointer for method1 and assign it to a variable named add. 
-UnityResolve::MethodPointer<void, int, bool> add; 
-ptr = method1->Cast(add); 
+>  This part demonstrates how to create a MethodPointer for method1 and assign it to a variable named add. 
+>  UnityResolve::MethodPointer<void, int, bool> add; 
+>  ptr = method1->Cast(add); 
 
-// A std::function is created to hold a callable that matches the signature of the method. 
-std::function<void(int, bool)> add2; 
-// The method is then cast to this std::function type, allowing for easier invocation later.
-method->Cast(add2);
+>  A std::function is created to hold a callable that matches the signature of the method. 
+>  std::function<void(int, bool)> add2; 
+>  The method is then cast to this std::function type, allowing for easier invocation later.
+>  method->Cast(add2);
 
-// The following code snippet illustrates how to work with fields in a class. 
-// A variable of type Vector3 associated with the Player class is initialized. 
-UnityResolve::Field::Variable<Vector3, Player> syncPos; 
-syncPos.Init(pClass->Get<UnityResolve::Field>("syncPos")); 
-// The position is then retrieved for a specific player instance.
-auto pos = syncPos[playerInstance]; 
-// Alternatively, the position can be obtained using the Get method.
-auto pos = syncPos.Get(playerInstance); 
+>  The following code snippet illustrates how to work with fields in a class. 
+>  A variable of type Vector3 associated with the Player class is initialized. 
+>  UnityResolve::Field::Variable<Vector3, Player> syncPos; 
+>  syncPos.Init(pClass->Get<UnityResolve::Field>("syncPos")); 
+>  The position is then retrieved for a specific player instance.
+>  auto pos = syncPos[playerInstance]; 
+>  Alternatively, the position can be obtained using the Get method.
+>  auto pos = syncPos.Get(playerInstance); 
 
 #### Dumping to File (DumpToFile)
 > ``` C++
@@ -204,7 +204,7 @@ This function allows you to export data to a specified file path. The `DumpToFil
 > const auto str     = UnityResolve::UnityType::String::New("string | string");
 > std::string cppStr = str.ToString();
 > ```
-In this snippet, a new C# string is created using the `UnityType::String::New` method. The string can be initialized with any valid string value. After creation, the `ToString` method is called to convert the C# string into a standard C++ string (`std::string`). This conversion is essential for interoperability between C# and C++ code, allowing you to manipulate the string using C++ standard library functions.
+> In this snippet, a new C# string is created using the `UnityType::String::New` method. The string can be initialized with any valid string value. After creation, the `ToString` method is called to convert the C# string into a standard C++ string (`std::string`). This conversion is essential for > interoperability between C# and C++ code, allowing you to manipulate the string using C++ standard library functions.
 
 #### Create C# Array
 > ``` c++
