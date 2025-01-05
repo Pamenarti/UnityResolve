@@ -286,7 +286,7 @@ This function allows you to export data to a specified file path. The `DumpToFil
 >                     // gameobj->GetComponentsInParent<return type>(Class* component)
 > ```
 
-// This project comprehensively performs object finding, component retrieval, and conversion between world and screen coordinates using the UnityResolve framework in the Unity game engine. 
-// The project offers various methods to determine the types of objects derived from the MonoBehaviour class, as well as effective ways to retrieve GameObject components. 
-// The methods used to convert 3D world points to 2D screen points ensure that objects in the scene are displayed correctly and enhance the user experience. 
-// Additionally, the FindObjectsByType method used to locate objects in the scene simplifies object management and provides developers with greater control over the objects in the scene.
+* This project comprehensively performs object finding, component retrieval, and conversion between world and screen coordinates using the UnityResolve framework in the Unity game engine. 
+* The project offers various methods to determine the types of objects derived from the MonoBehaviour class, as well as effective ways to retrieve GameObject components. 
+* The methods used to convert 3D world points to 2D screen points ensure that objects in the scene are displayed correctly and enhance the user experience. 
+* Additionally, the FindObjectsByType method used to locate objects in the scene simplifies object management and provides developers with greater control over the objects in the scene.
